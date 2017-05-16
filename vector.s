@@ -3,7 +3,7 @@
 @ Autor: Luis Diego Fernandez, 16344 
 @ Autor: María Mercedes Retolaza, 16339 
 @ Seccion: 1011
-@ Descripcion: Pre laboratorio 13, se manejan los calculos que involucran vectores
+@ Descripcion: Pre laboratorio 13, se manejan los calculos que involucran vectores 
 @----------------------------------------------------------
 
 
@@ -17,27 +17,38 @@ main:
 	LDR R6,=value3
 	MOV R10,#3
 ciclo:
+
+/* Los cambios que se realizaron fueron que se cambia el movimiento de los registros 
+es decir ahora se mueven de 1 en 1 en vez de 2 en 2*/ 
+
 	VLDR S16, [R8]		@ load values into
-	VLDR S18, [R8,#4]		@ registers
-	VLDR S20, [R8,#8]
-	VLDR S22, [R8,#12]
+	VLDR S17, [R8,#4]		@ registers
+	VLDR S19, [R8,#8]
+	VLDR S20, [R8,#12]
 	VLDR S24, [R9]
-	VLDR S26, [R9,#4]
-	VLDR S28, [R9,#8]
-	VLDR S30, [R9,#12]
+	VLDR S25, [R9,#4]
+	VLDR S26, [R9,#8]
+	VLDR S27, [R9,#12]
+
 lenstride:
 /* Set LEN(16-18)=4 0b011 and STRIDE(20-21)=2 0b11 */
 	VMRS R3, FPSCR		@ get current FPSCR
-	MOV R4,  #0b11011	@ bit pattern
+	MOV R4,  #0b00011	@ bit pattern cambio de len 
 	MOV R4, R4, LSL #16	@ move across to b21
 	ORR R3, R3, R4		@ keep all 1's
 	VMSR FPSCR, R3		@ transfer to FPSCR 
-	VADD.F32 S8, S16, S24	@ Vector addition in parallel
+	/* Raiz cuadrada de los valores, se añade una instruccion directa, se evalua cada uno por separado
+	y luego se junta */ 
 
-	VSTR S8, [R6]
-	VSTR S10, [R6,#4]
-	VSTR S12, [R6,#8]
-	VSTR S14, [R6,#12]
+	VSQRT.F32 S16,S16
+	VSQRT.F32 S24, S24
+	VADD.F32 S8, S16, S24	@ Vector addition in 
+
+
+	VSTR S8,  [R6]
+	VSTR S9, [R6,#4]
+	VSTR S10, [R6,#8]
+	VSTR S11, [R6,#12]
 
 	ADD R6,#16
 	ADD R8,#16
