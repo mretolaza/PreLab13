@@ -1,11 +1,9 @@
-
 @----------------------------------------------------------
-@ Autor: Luis Diego Fernandez, 16344 
 @ Autor: María Mercedes Retolaza, 16339 
+@ Laboratorio no.13 
 @ Seccion: 1011
-@ Descripcion: Pre laboratorio 13, se manejan los calculos que involucran vectores 
+@ Descripcion: Se hace el uso de vectores y se hacen diferentes operaciones, que permiten trabajar en ella. 
 @----------------------------------------------------------
-
 
 /*** Using LEN and STRIDE to sum vectors ***/
 	.global	main
@@ -15,40 +13,35 @@ main:
 	LDR R8,=value1	@ Get addr of values
 	LDR R9,=value2
 	LDR R6,=value3
-	MOV R10,#3
+	MOV R10,#25
 ciclo:
-
-/* Los cambios que se realizaron fueron que se cambia el movimiento de los registros 
-es decir ahora se mueven de 1 en 1 en vez de 2 en 2*/ 
-
 	VLDR S16, [R8]		@ load values into
-	VLDR S17, [R8,#4]		@ registers
-	VLDR S19, [R8,#8]
-	VLDR S20, [R8,#12]
+	VLDR S18, [R8,#4]		@ registers
+	VLDR S20, [R8,#8]
+	VLDR S22, [R8,#12]
 	VLDR S24, [R9]
-	VLDR S25, [R9,#4]
-	VLDR S26, [R9,#8]
-	VLDR S27, [R9,#12]
-
+	VLDR S26, [R9,#4]
+	VLDR S28, [R9,#8]
+	VLDR S30, [R9,#12]
 lenstride:
 /* Set LEN(16-18)=4 0b011 and STRIDE(20-21)=2 0b11 */
 	VMRS R3, FPSCR		@ get current FPSCR
-	MOV R4,  #0b00011	@ bit pattern cambio de len 
+	MOV R4,  #0b11011	@ bit pattern
 	MOV R4, R4, LSL #16	@ move across to b21
 	ORR R3, R3, R4		@ keep all 1's
 	VMSR FPSCR, R3		@ transfer to FPSCR 
-	/* Raiz cuadrada de los valores, se añade una instruccion directa, se evalua cada uno por separado
-	y luego se junta */ 
+	
+	VSQRT.F32 S16, S16		@ RAIZ DEL PRIMER VECTOR
+	VMUL.F32 S24, S24,S24	@ SEGUNDO VECTOR ^2
+	
+	
 
-	VSQRT.F32 S16,S16
-	VSQRT.F32 S24, S24
-	VADD.F32 S8, S16, S24	@ Vector addition in 
+	VADD.F32 S8, S16, S24	@ Vector addition in parallel
 
-
-	VSTR S8,  [R6]
-	VSTR S9, [R6,#4]
-	VSTR S10, [R6,#8]
-	VSTR S11, [R6,#12]
+	VSTR S8, [R6]
+	VSTR S10, [R6,#4]
+	VSTR S12, [R6,#8]
+	VSTR S14, [R6,#12]
 
 	ADD R6,#16
 	ADD R8,#16
@@ -78,13 +71,12 @@ _exit:
 add_value3: .word value3
 
 	.data
-value1:	.float 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0
-value2:	.float 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.101, 0.11, 0.12
-value3:	.float 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+value1:	.float 1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0
+value2:	.float 1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0
+value3:	.float 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
 
 string:
 .asciz " S8 is %f\n S10 is %f\n S12 is %f\n S14 is %f\n"
 
 formatoF:
 .asciz  "Valor %f\n"
-
