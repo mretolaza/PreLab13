@@ -32,7 +32,7 @@ lenstride:
 	VMSR FPSCR, R3		@ transfer to FPSCR 
 	
 	VSQRT.F32 S16, S16		@ RAIZ DEL PRIMER VECTOR
-	VMUL.F32 S24, S24,S24	@ SEGUNDO VECTOR ^2
+	VMUL.F32 S24, S24,S24	@ AQUI SE HACE EL SEGUNDO VECTOR ^2
 	
 	
 
@@ -52,7 +52,7 @@ lenstride:
 convert_and_print:
 /* Do conversion for printing, making sure not */
 /* to corrupt Sx registers by over writing */
-	MOV R10,#12
+	MOV R10,#100
 	LDR R6,add_value3
 imprimir:
 	VLDR S8,[R6]
